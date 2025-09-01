@@ -31,8 +31,8 @@ parser.add_argument('--eval_gt_path_Haze', type=str,default= '/gdata2/zhuyr/Weat
 parser.add_argument('--eval_in_path_Rain', type=str,default= '/gdata2/zhuyr/Weather/Data/Rain/rain1400/testing/rainy_image/')
 parser.add_argument('--eval_gt_path_Rain', type=str,default= '/gdata2/zhuyr/Weather/Data/Rain/rain1400/testing/ground_truth/')
 
-parser.add_argument('--eval_in_path_L', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-L/synthetic/')
-parser.add_argument('--eval_gt_path_L', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-L/gt/')
+parser.add_argument('--eval_in_path_L', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Snow100K/test2000/synthetic')
+parser.add_argument('--eval_gt_path_L', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Snow100K/test2000/gt')
 
 parser.add_argument('--eval_in_path_M', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-M/synthetic/')
 parser.add_argument('--eval_gt_path_M', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-M/gt/')
@@ -59,9 +59,9 @@ parser.add_argument('--eval_in_path_Mix', type=str,default= '/gdata2/zhuyr/Weath
 parser.add_argument('--eval_gt_path_Mix', type=str,default= '/gdata2/zhuyr/Weather/Data/Rain/GT-RAIN/ECCV_accumulation_GT/')
 
 
-parser.add_argument('--model_path', type=str,default= '/ghome/zhuyr/WGWSNet/ckpt/')
+parser.add_argument('--model_path', type=str,default= '/home/lorenzomignone/github/WGWS-Net/ckpt/')
 parser.add_argument('--model_name', type=str,default= 'Setting2_K1.pth')
-parser.add_argument('--save_path', type=str,default= '/ghome/zhuyr/WGWSNet/results/')
+parser.add_argument('--save_path', type=str,default= '/home/lorenzomignone/github/WGWS-Net/results')
 
 parser.add_argument('--Dname', type=str,default= 'RealRain-mix0.1')
 parser.add_argument('--flag', type=str, default= 'K1')
@@ -175,26 +175,26 @@ if __name__ == '__main__':
         print("Haze (Expansion Ratios) || Percent_B3 0.05: {} |  0.1: {} | 0.15: {} ".format(Percent_B3, Percent_B3_1, Percent_B3_2))
         
     eval_loader_Haze = get_eval_data(val_in_path=args.eval_in_path_Haze, val_gt_path=args.eval_gt_path_Haze)
-    eval_loader_S = get_eval_data(val_in_path=args.eval_in_path_S, val_gt_path=args.eval_gt_path_S)
-    eval_loader_M = get_eval_data(val_in_path=args.eval_in_path_M, val_gt_path=args.eval_gt_path_M)
-    eval_loader_L = get_eval_data(val_in_path=args.eval_in_path_L, val_gt_path=args.eval_gt_path_L)
-    eval_loader_Rain = get_eval_data(val_in_path=args.eval_in_path_Rain, val_gt_path=args.eval_gt_path_Rain)
-    eval_loader_RealRain = get_eval_data(val_in_path=args.eval_in_path_realRain, val_gt_path=args.eval_in_path_realRain)
-    eval_loader_RealSnow = get_eval_data(val_in_path=args.eval_in_path_realSnow, val_gt_path=args.eval_in_path_realSnow)
-    eval_loader_RealHaze = get_eval_data(val_in_path=args.eval_in_path_realHaze, val_gt_path=args.eval_in_path_realHaze)
+    # eval_loader_S = get_eval_data(val_in_path=args.eval_in_path_S, val_gt_path=args.eval_gt_path_S)
+    # eval_loader_M = get_eval_data(val_in_path=args.eval_in_path_M, val_gt_path=args.eval_gt_path_M)
+    # eval_loader_L = get_eval_data(val_in_path=args.eval_in_path_L, val_gt_path=args.eval_gt_path_L)       # decommentare per neve
+    # eval_loader_Rain = get_eval_data(val_in_path=args.eval_in_path_Rain, val_gt_path=args.eval_gt_path_Rain)
+    # eval_loader_RealRain = get_eval_data(val_in_path=args.eval_in_path_realRain, val_gt_path=args.eval_in_path_realRain)
+    # eval_loader_RealSnow = get_eval_data(val_in_path=args.eval_in_path_realSnow, val_gt_path=args.eval_in_path_realSnow)
+    # eval_loader_RealHaze = get_eval_data(val_in_path=args.eval_in_path_realHaze, val_gt_path=args.eval_in_path_realHaze)
     
     
-    eval_loader_RealRainRe = get_eval_data(val_in_path=args.eval_in_path_realRainRe, val_gt_path=args.eval_in_path_realRainRe)
-    eval_loader_RealRainReForDerain2  = get_eval_data(val_in_path=args.eval_in_path_realRainReForDerain2, val_gt_path=args.eval_in_path_realRainReForDerain2)
-    eval_loader_Mix = get_eval_data(val_in_path=args.eval_in_path_Mix, val_gt_path=args.eval_gt_path_Mix)
+    # eval_loader_RealRainRe = get_eval_data(val_in_path=args.eval_in_path_realRainRe, val_gt_path=args.eval_in_path_realRainRe)
+    # eval_loader_RealRainReForDerain2  = get_eval_data(val_in_path=args.eval_in_path_realRainReForDerain2, val_gt_path=args.eval_in_path_realRainReForDerain2)
+    # eval_loader_Mix = get_eval_data(val_in_path=args.eval_in_path_Mix, val_gt_path=args.eval_gt_path_Mix)
     
 
 
     # Rain
-    test(net=net, eval_loader = eval_loader_Rain,  Dname= 'R1400',flag = [0,1,0],model_flag= args.flag)
-    # Haze
+    # test(net=net, eval_loader = eval_loader_Rain,  Dname= 'R1400',flag = [0,1,0],model_flag= args.flag)
+    # # Haze
     test(net=net, eval_loader = eval_loader_Haze, Dname= 'H500',flag = [0,0,1],model_flag= args.flag)
-    test(net=net, eval_loader = eval_loader_RealHaze,  Dname=  'RealHaze-from_internet',flag = [0,0,1],model_flag= args.flag)
+    # test(net=net, eval_loader = eval_loader_RealHaze,  Dname=  'RealHaze-from_internet',flag = [0,0,1],model_flag= args.flag)
     # Snow
     # test(net=net, eval_loader = eval_loader_L,  Dname= 'L',flag = [1,0,0],model_flag= args.flag)
     # test(net=net, eval_loader = eval_loader_RealSnow, Dname= 'RealSnow',flag = [1,0,0],model_flag= args.flag)

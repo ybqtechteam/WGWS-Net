@@ -53,8 +53,8 @@ print('device ----------------------------------------:',device)
 
 parser = argparse.ArgumentParser()
 # path setting
-parser.add_argument('--experiment_name', type=str,default= "training_R1K_H500_S2k_JointPre_PP_Tri") # modify the experiments name-->modify all save path
-parser.add_argument('--unified_path', type=str,default=  '/gdata2/zhuyr/Weather/')
+parser.add_argument('--experiment_name', type=str,default= "mymodel") # modify the experiments name-->modify all save path
+parser.add_argument('--unified_path', type=str,default=  '/home/lorenzomignone/github/WGWS-Net')
 #parser.add_argument('--model_save_dir', type=str, default= )#required=True
 parser.add_argument('--training_in_path', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/all_trainingData/synthetic/')
 parser.add_argument('--training_gt_path', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/all_trainingData/gt/')
@@ -66,8 +66,8 @@ parser.add_argument('--training_in_pathRD', type=str,default= '/gdata2/zhuyr/Wea
 parser.add_argument('--training_gt_pathRD', type=str,default= '/gdata2/zhuyr/Weather/Data/RainDrop/train/train/gt/')
 
 
-parser.add_argument('--writer_dir', type=str, default= '/ghome/zhuyr/UDC_codes/writer_logs/')
-parser.add_argument('--logging_path', type=str, default= '/ghome/zhuyr/UDC_codes/logging/')
+parser.add_argument('--writer_dir', type=str, default= '/home/lorenzomignone/github/WGWS-Net/logs')
+parser.add_argument('--logging_path', type=str, default= '/home/lorenzomignone/github/WGWS-Net/logs/logging')
 
 parser.add_argument('--eval_in_path_RD', type=str,default= '/gdata2/zhuyr/Weather/Data/RainDrop/test_a/test_a/data-re/')
 parser.add_argument('--eval_gt_path_RD', type=str,default= '/gdata2/zhuyr/Weather/Data/RainDrop/test_a/test_a/gt-re/')
@@ -93,7 +93,7 @@ parser.add_argument('--VGG_lamda', type=float, default= 0.1)
 parser.add_argument('--debug', type=bool, default= False)
 parser.add_argument('--lam', type=float, default= 0.1)
 parser.add_argument('--flag', type=str, default= 'K1')
-parser.add_argument('--pre_model', type=str,default= '/gdata2/zhuyr/Weather/training_Setting1_PP1004-2/net_epoch_88.pth')
+parser.add_argument('--pre_model', type=str,default= '/home/lorenzomignone/github/WGWS-Net/ckpt/Setting3_K1.pth')
 
 #training setting
 parser.add_argument('--base_channel', type = int, default= 20)
@@ -134,12 +134,12 @@ print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
 print("=="*50)
 def check_dataset(in_path, gt_path,name ='RD'):
     print( "Check {} pairs({}) ???: {} ".format(name,len(in_path), os.listdir(in_path)==os.listdir(gt_path)) )
-check_dataset(args.eval_in_path_RD,args.eval_gt_path_RD,'val-RD' )
-check_dataset(args.eval_in_path_Rain,args.eval_gt_path_Rain,'val-Rain' )
-check_dataset(args.eval_in_path_L,args.eval_gt_path_L,'val-Snow-L' )
-check_dataset(args.training_in_path,args.training_gt_path,'Train_Snow' )
-check_dataset(args.training_in_pathRain,args.training_gt_pathRain,'Train_Rain' )
-check_dataset(args.training_in_pathRD,args.training_gt_pathRD,'Train_RD' )
+# check_dataset(args.eval_in_path_RD,args.eval_gt_path_RD,'val-RD' )
+# check_dataset(args.eval_in_path_Rain,args.eval_gt_path_Rain,'val-Rain' )
+# check_dataset(args.eval_in_path_L,args.eval_gt_path_L,'val-Snow-L' )
+# check_dataset(args.training_in_path,args.training_gt_path,'Train_Snow' )
+# check_dataset(args.training_in_pathRain,args.training_gt_pathRain,'Train_Rain' )
+# check_dataset(args.training_in_pathRD,args.training_gt_pathRD,'Train_RD' )
 print("=="*50)
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
@@ -212,6 +212,8 @@ if __name__ == '__main__':
         from networks.Network_Stage2_K1_Flag import UNet
     elif args.flag == 'K3':
         from networks.Network_Stage2_K3_Flag import UNet
+    
+    device_ids = [0]
 
     net = UNet(base_channel=base_channel, num_res=num_res)
     net_eval = UNet(base_channel=base_channel, num_res=num_res)
@@ -241,7 +243,7 @@ if __name__ == '__main__':
     loss_char= losses.CharbonnierLoss()
 
     vgg = models.vgg16(pretrained=False)
-    vgg.load_state_dict(torch.load('/gdata2/zhuyr/VGG/vgg16-397923af.pth'))
+    vgg.load_state_dict(torch.load('/home/lorenzomignone/github/WGWS-Net/VGG/vgg16-397923af.pth'))
     vgg_model = vgg.features[:16]
     vgg_model = vgg_model.to(device)
     for param in vgg_model.parameters():

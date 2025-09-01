@@ -160,7 +160,8 @@ class my_dataset_eval(Dataset):
         gt_img_path = self.imgs_gt[index]
         gt_img = Image.open(gt_img_path)
         trans_eval = transforms.Compose(
-            [
+            [   
+                transforms.Resize((480, 640)),
                 transforms.ToTensor()
             ])
 
@@ -245,6 +246,7 @@ class my_dataset_eval_Transweather(Dataset):
         self.imgs_gt = [os.path.join(root_label, k) for k in in_files]
 
         self.transform = transform
+    
     def __getitem__(self, index):
         in_img_path = self.imgs_in[index]
         img_name =in_img_path.split('/')[-1]

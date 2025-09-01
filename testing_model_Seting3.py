@@ -23,17 +23,17 @@ print(device)
 parser = argparse.ArgumentParser()
 
 
-parser.add_argument('--eval_in_path_Haze', type=str,default= '/gdata2/zhuyr/Weather/Data/Haze/REVID/Test/hazy_re/')
-parser.add_argument('--eval_gt_path_Haze', type=str,default= '/gdata2/zhuyr/Weather/Data/Haze/REVID/Test/gt_re/')
+parser.add_argument('--eval_in_path_Haze', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/haze/hazy')
+parser.add_argument('--eval_gt_path_Haze', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/haze/gt')
 
-parser.add_argument('--eval_in_path_Rain', type=str,default= '/gdata2/zhuyr/Weather/Data/Rain/RealRain/Testing/real_test_1000/rain_jpg/')
-parser.add_argument('--eval_gt_path_Rain', type=str,default= '/gdata2/zhuyr/Weather/Data/Rain/RealRain/Testing/real_test_1000/gt_jpg/')
+parser.add_argument('--eval_in_path_Rain', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Rain100L/rainy')
+parser.add_argument('--eval_gt_path_Rain', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Rain100L/gt')
 
-parser.add_argument('--eval_in_path_L', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/RealSnow/video2imgs_IN_testing_re/')
-parser.add_argument('--eval_gt_path_L', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/RealSnow/video2imgs_GT_testing_re/')
+parser.add_argument('--eval_in_path_L', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/realsnow_video/test/synthetic')
+parser.add_argument('--eval_gt_path_L', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/realsnow_video/test/gt')
 
-parser.add_argument('--eval_in_path_M', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-M/synthetic/')
-parser.add_argument('--eval_gt_path_M', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-M/gt/')
+parser.add_argument('--eval_in_path_M', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Snow100K/test2000/synthetic') #ignora
+parser.add_argument('--eval_gt_path_M', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Snow100K/test2000/gt') #ignora
 
 parser.add_argument('--eval_in_path_S', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-S/synthetic/')
 parser.add_argument('--eval_gt_path_S', type=str,default= '/gdata2/zhuyr/Weather/Data/Snow/test/Snow100K-S/gt/')
@@ -45,13 +45,13 @@ parser.add_argument('--eval_gt_path_realSnow', type=str,default= '/gdata2/zhuyr/
 parser.add_argument('--eval_in_path_realRain', type=str,default= '/gdata2/zhuyr/Weather/Data/RealRain300/')
 parser.add_argument('--eval_gt_path_realRain', type=str,default= '/gdata2/zhuyr/Weather/Data/RealRain300/')
 
-parser.add_argument('--eval_in_path_realHaze', type=str,default= '/gdata2/zhuyr/Weather/Data/Haze/real_world_hazy_imgs/')
-parser.add_argument('--eval_gt_path_realHaze', type=str,default= '/gdata2/zhuyr/Weather/Data/Haze/real_world_hazy_imgs/')
+parser.add_argument('--eval_in_path_realHaze', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/revide/Test/')
+parser.add_argument('--eval_gt_path_realHaze', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/revide/Test/')
 
 
-parser.add_argument('--model_path', type=str,default= '/ghome/zhuyr/WGWSNet/ckpt/')
+parser.add_argument('--model_path', type=str,default= '/home/lorenzomignone/github/WGWS-Net/ckpt/')
 parser.add_argument('--model_name', type=str,default= 'Setting3_K1.pth')
-parser.add_argument('--save_path', type=str,default= '/ghome/zhuyr/WGWSNet/results/')
+parser.add_argument('--save_path', type=str,default= '/home/lorenzomignone/github/WGWS-Net/results')
 
 parser.add_argument('--flag', type=str, default= 'K1')
 parser.add_argument('--base_channel', type = int, default= 20)
@@ -60,7 +60,8 @@ args = parser.parse_args()
 
 trans_eval = transforms.Compose(
         [
-         transforms.ToTensor()
+        transforms.Resize((480, 640)),  # Resize to a fixed size
+        transforms.ToTensor()
         ])
 
 if not os.path.exists(args.save_path):
@@ -126,6 +127,7 @@ def print_indictor(indictor):
     y = np.ones_like(indictor_array)
     out = np.where(indictor_array>0.1, y,x)
     print('indictor_array---Binary out:',list(out))
+
 if __name__ == '__main__':
     if args.flag == 'K1':
         from networks.Network_Stage2_K1_Flag import UNet
@@ -164,20 +166,20 @@ if __name__ == '__main__':
         print("Haze (Expansion Ratios) || Percent_B3 0.05: {} |  0.1: {} | 0.15: {} ".format(Percent_B3, Percent_B3_1, Percent_B3_2))
         
     eval_loader_Haze = get_eval_H_data(val_in_path=args.eval_in_path_Haze, val_gt_path=args.eval_gt_path_Haze)
-    eval_loader_L = get_eval_data(val_in_path=args.eval_in_path_L, val_gt_path=args.eval_gt_path_L)
-    eval_loader_Rain = get_eval_data(val_in_path=args.eval_in_path_Rain, val_gt_path=args.eval_gt_path_Rain)
-    eval_loader_RealRain = get_eval_data(val_in_path=args.eval_in_path_realRain, val_gt_path=args.eval_in_path_realRain)
-    eval_loader_RealSnow = get_eval_data(val_in_path=args.eval_in_path_realSnow, val_gt_path=args.eval_in_path_realSnow)
-    eval_loader_RealHaze = get_eval_H_data(val_in_path=args.eval_in_path_realHaze, val_gt_path=args.eval_in_path_realHaze)
+    # eval_loader_L = get_eval_data(val_in_path=args.eval_in_path_L, val_gt_path=args.eval_gt_path_L)
+    # eval_loader_Rain = get_eval_data(val_in_path=args.eval_in_path_Rain, val_gt_path=args.eval_gt_path_Rain)
+    # eval_loader_RealRain = get_eval_data(val_in_path=args.eval_in_path_realRain, val_gt_path=args.eval_in_path_realRain)
+    # eval_loader_RealSnow = get_eval_data(val_in_path=args.eval_in_path_realSnow, val_gt_path=args.eval_in_path_realSnow)
+    # eval_loader_RealHaze = get_eval_H_data(val_in_path=args.eval_in_path_realHaze, val_gt_path=args.eval_in_path_realHaze)
 
 
     #Derain 
-    test(net=net, eval_loader = eval_loader_Rain,  Dname= 'SPA+',flag = [0,1,0],model_flag= args.flag)
+    # test(net=net, eval_loader = eval_loader_Rain,  Dname= 'SPA+',flag = [0,1,0],model_flag= args.flag) #######
     #test(net=net, eval_loader = eval_loader_RealRain, epoch = epoch,  Dname= 'RealRain-fromInterNet',flag = [0,1,0],model_flag= args.flag)
     # Dehaze
-    test(net=net, eval_loader = eval_loader_Haze, Dname= 'RealHaze',flag =  [1,0,0],model_flag= args.flag)
-    #test(net=net, eval_loader = eval_loader_RealHaze, epoch=epoch, Dname= 'Real_Haze-fromInterNet',flag = [1,0,0],model_flag= args.flag)
+    test(net=net, eval_loader = eval_loader_Haze, Dname= 'RealHaze',flag =  [1,0,0],model_flag= args.flag) #######
+    # test(net=net, eval_loader = eval_loader_RealHaze, epoch=epoch, Dname= 'Real_Haze-fromInterNet',flag = [1,0,0],model_flag= args.flag)
     # Desnow
-    test(net=net, eval_loader = eval_loader_L, Dname= 'RealSnow',flag =  [0,0,1] ,model_flag= args.flag)
+    # test(net=net, eval_loader = eval_loader_L, Dname= 'RealSnow',flag =  [0,0,1] ,model_flag= args.flag) #####
     #test(net=net, eval_loader = eval_loader_RealSnow, epoch = epoch,  Dname= 'RealSnow-fromInterNet',flag = [0,0,1] ,model_flag= args.flag)
     
