@@ -29,8 +29,8 @@ parser.add_argument('--eval_gt_path_Haze', type=str,default= '/home/lorenzomigno
 parser.add_argument('--eval_in_path_Rain', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Rain100L/rainy')
 parser.add_argument('--eval_gt_path_Rain', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Rain100L/gt')
 
-parser.add_argument('--eval_in_path_L', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/realsnow_video/test/synthetic')
-parser.add_argument('--eval_gt_path_L', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/realsnow_video/test/gt')
+parser.add_argument('--eval_in_path_L', type=str,default= '/home/lorenzomignone/gitlab/vista/models/WGWS-Net/data/Realsnow85/006/Snow')
+parser.add_argument('--eval_gt_path_L', type=str,default= '/home/lorenzomignone/gitlab/vista/models/WGWS-Net/data/Realsnow85/006/Gt')
 
 parser.add_argument('--eval_in_path_M', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Snow100K/test2000/synthetic') #ignora
 parser.add_argument('--eval_gt_path_M', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/Snow100K/test2000/gt') #ignora
@@ -49,9 +49,9 @@ parser.add_argument('--eval_in_path_realHaze', type=str,default= '/home/lorenzom
 parser.add_argument('--eval_gt_path_realHaze', type=str,default= '/home/lorenzomignone/github/WGWS-Net/data/revide/Test/')
 
 
-parser.add_argument('--model_path', type=str,default= '/home/lorenzomignone/github/WGWS-Net/ckpt/')
+parser.add_argument('--model_path', type=str,default= '/home/lorenzomignone/gitlab/vista/models/WGWS-Net/ckpt/')
 parser.add_argument('--model_name', type=str,default= 'Setting3_K1.pth')
-parser.add_argument('--save_path', type=str,default= '/home/lorenzomignone/github/WGWS-Net/results')
+parser.add_argument('--save_path', type=str,default= '/home/lorenzomignone/gitlab/vista/models/WGWS-Net/')
 
 parser.add_argument('--flag', type=str, default= 'K1')
 parser.add_argument('--base_channel', type = int, default= 20)
@@ -165,8 +165,8 @@ if __name__ == '__main__':
         print("Rain (Expansion Ratios) || Percent_B2 0.05: {} |  0.1: {} | 0.15: {} ".format(Percent_B2, Percent_B2_1, Percent_B2_2))
         print("Haze (Expansion Ratios) || Percent_B3 0.05: {} |  0.1: {} | 0.15: {} ".format(Percent_B3, Percent_B3_1, Percent_B3_2))
         
-    eval_loader_Haze = get_eval_H_data(val_in_path=args.eval_in_path_Haze, val_gt_path=args.eval_gt_path_Haze)
-    # eval_loader_L = get_eval_data(val_in_path=args.eval_in_path_L, val_gt_path=args.eval_gt_path_L)
+    # eval_loader_Haze = get_eval_H_data(val_in_path=args.eval_in_path_Haze, val_gt_path=args.eval_gt_path_Haze)
+    eval_loader_L = get_eval_data(val_in_path=args.eval_in_path_L, val_gt_path=args.eval_gt_path_L)
     # eval_loader_Rain = get_eval_data(val_in_path=args.eval_in_path_Rain, val_gt_path=args.eval_gt_path_Rain)
     # eval_loader_RealRain = get_eval_data(val_in_path=args.eval_in_path_realRain, val_gt_path=args.eval_in_path_realRain)
     # eval_loader_RealSnow = get_eval_data(val_in_path=args.eval_in_path_realSnow, val_gt_path=args.eval_in_path_realSnow)
@@ -177,9 +177,9 @@ if __name__ == '__main__':
     # test(net=net, eval_loader = eval_loader_Rain,  Dname= 'SPA+',flag = [0,1,0],model_flag= args.flag) #######
     #test(net=net, eval_loader = eval_loader_RealRain, epoch = epoch,  Dname= 'RealRain-fromInterNet',flag = [0,1,0],model_flag= args.flag)
     # Dehaze
-    test(net=net, eval_loader = eval_loader_Haze, Dname= 'RealHaze',flag =  [1,0,0],model_flag= args.flag) #######
+    # test(net=net, eval_loader = eval_loader_Haze, Dname= 'RealHaze',flag =  [1,0,0],model_flag= args.flag) #######
     # test(net=net, eval_loader = eval_loader_RealHaze, epoch=epoch, Dname= 'Real_Haze-fromInterNet',flag = [1,0,0],model_flag= args.flag)
     # Desnow
-    # test(net=net, eval_loader = eval_loader_L, Dname= 'RealSnow',flag =  [0,0,1] ,model_flag= args.flag) #####
+    test(net=net, eval_loader = eval_loader_L, Dname= 'RealSnow',flag =  [0,0,1] ,model_flag= args.flag) #####
     #test(net=net, eval_loader = eval_loader_RealSnow, epoch = epoch,  Dname= 'RealSnow-fromInterNet',flag = [0,0,1] ,model_flag= args.flag)
     
