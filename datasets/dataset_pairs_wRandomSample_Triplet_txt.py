@@ -157,6 +157,7 @@ class my_dataset_eval(Dataset):
         img_name =in_img_path.split('/')[-1]
 
         in_img = Image.open(in_img_path)
+        H, W = in_img.size
         gt_img_path = self.imgs_gt[index]
         gt_img = Image.open(gt_img_path)
         trans_eval = transforms.Compose(
@@ -173,7 +174,7 @@ class my_dataset_eval(Dataset):
             data_GT = transforms.Resize(((h // 32) * 32, (w // 32) * 32))(data_GT)
             data_IN = transforms.Resize(((h // 32) * 32, (w // 32) * 32))(data_IN)
 
-        return data_IN, data_GT, img_name
+        return data_IN, data_GT, img_name, H, W
 
     def __len__(self):
         return len(self.imgs_in)
